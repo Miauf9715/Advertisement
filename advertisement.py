@@ -40,13 +40,7 @@ class GUI():
 #        self.ref_to_Rimg = ImageTk.PhotoImage(self.R_img)
 #        self.fig_R.itemconfig(self.fig_R_Nr, image = self.ref_to_Rimg)
 #        
-#                self.A_img = Image.open(self.input_folder_figures+"A0.jpg")
-#        self.ref_to_Aimg = ImageTk.PhotoImage(self.A_img)
-#                self.fig_A = Canvas(self.plot_window)
-#        self.fig_A.grid(column=0, row=2, sticky=(N, W, E, S))
-#        self.fig_A.config(width = width, height = height)
-#        self.fig_A_Nr = self.fig_A.create_image(0, 0, image=self.ref_to_Aimg, anchor
-        
+
 
 GUI1 = GUI()
 GUI1.load_image("buy.bmp")
