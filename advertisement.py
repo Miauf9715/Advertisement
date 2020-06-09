@@ -5,50 +5,46 @@ Created on Wed May 27 23:10:39 2020
 @author: Miaufs_comp
 """
 
-from PIL import Image
-from PIL import ImageTk
 import numpy as np
-import tkinter as tk
+from tkinter import *
+from PIL import ImageTk, Image
 
 class GUI():
     def __init__(self):
-        self.plot_window = tk.Tk()
+        self.current_column = 1
+        self.image_height = 0
+        self.image_width = 0
+        self.cropped_width = 10
         
     def load_image(self, image_source):
-        self.image = Image.open("buy.bmp")
-#        self.image.show()
-#        self.source = np.array(self.image)
-        print(self.image.height)
-        self.advertisement_poster = tk.Canvas(self.plot_window, width=self.image.width, height=self.image.height)
-        self.advertisement_poster.grid(row = 0, column = 0)
-        ph = ImageTk.PhotoImage(self.image)
-        print(ph)
-        pointer_to_image = self.advertisement_poster.create_image(0, 0, image=ph, anchor=tk.NW)
+        self.plot_window = Tk()
+        self.plot_window.title("3D slice")
+        
+        # Opening first images
+        self.R_img = Image.open(image_source)
+        self.image_width, self.image_height = self.R_img.size
+        self.R_img_cropped = self.R_img.crop((self.current_column,1,self.current_column+self.cropped_width,self.image_height))
+        self.ref_to_Rimg = ImageTk.PhotoImage(self.R_img_cropped)
+        
+        # Create a real canvas
+        self.fig_R = Canvas(self.plot_window)
+        self.fig_R.grid(column=0, row=0, sticky=(N, W, E, S))
+        self.fig_R.create_rectangle(0, 0, 400, 400, fill="black")
+        self.fig_R.config(width = 400, height = 400)
+        self.fig_R_Nr = self.fig_R.create_image(200, 100, image=self.ref_to_Rimg, anchor=NW)
         
     def show_image(self):
-#        im1 = self.image.crop((50, 0, 51, 29)) 
-#        img = Image.fromarray(self.source[0,:], 'RGB')
-#        self.advertisement_poster.
-        ph = ImageTk.PhotoImage(self.image)
-        print(ph)
-        self.advertisement_poster.create_image(0, 0, image=ph, anchor=tk.NW)
-#        im1.show() 
-#        print(im1)
-#        self.fig_A_Nr = self.fig_A.create_image(0, 0, image=self.ref_to_Aimg, anchor=NW)
-#        self.image_on_the_screen = MapNr
-#        self.R_img = Image.open(self.input_folder_figures+"R"+str(self.image_on_the_screen)+".jpg")
-#        self.ref_to_Rimg = ImageTk.PhotoImage(self.R_img)
-#        self.fig_R.itemconfig(self.fig_R_Nr, image = self.ref_to_Rimg)
-#        
-#                self.A_img = Image.open(self.input_folder_figures+"A0.jpg")
-#        self.ref_to_Aimg = ImageTk.PhotoImage(self.A_img)
-#                self.fig_A = Canvas(self.plot_window)
-#        self.fig_A.grid(column=0, row=2, sticky=(N, W, E, S))
-#        self.fig_A.config(width = width, height = height)
-#        self.fig_A_Nr = self.fig_A.create_image(0, 0, image=self.ref_to_Aimg, anchor
-        
-
+        self.R_img_cropped = self.R_img.crop((self.current_column,1,self.current_column+self.cropped_width,self.image_height))
+        self.ref_to_Rimg = ImageTk.PhotoImage(self.R_img_cropped)
+        self.fig_R.itemconfigure(self.fig_R_Nr, image=self.ref_to_Rimg)
+        if self.current_column <= self.image_width-12:
+           self.current_column += 1
+        else:
+           self.current_column = 1
+#        print(self.current_column)
+        self.fig_R.after(1,self.show_image)
+           
 GUI1 = GUI()
 GUI1.load_image("buy.bmp")
-#GUI1.show_image()
+GUI1.show_image()
 GUI1.plot_window.mainloop()
